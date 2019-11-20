@@ -45,6 +45,8 @@ class SnakeGame:
             self.snake.move("LEFT")
         elif event.key == pygame.K_RIGHT:
             self.snake.move("RIGHT")
+        elif event.key == pygame.K_ESCAPE:
+            exit()
 
     def _lines(self):
         """Draws dividing lines"""
