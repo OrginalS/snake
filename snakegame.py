@@ -83,7 +83,7 @@ class SnakeGame:
         pygame.display.flip()
         sleep(0.1)
 
-    def _check_colisions(self):
+    def _check_collisions(self):
         if self.snake.head == self.fruit.fruits[0]:
             self.fruit.fruits.pop()
             self.snake.grow()
@@ -94,7 +94,7 @@ class SnakeGame:
     def run(self):
         """Starts the game"""
         while True:
-            self._check_colisions()
+            self._check_collisions()
             if not self.fruit.fruits:
                 self.fruit.new_fruit()
             self._check_events()
