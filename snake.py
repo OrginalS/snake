@@ -14,12 +14,15 @@ class Snake:
         self.movement = [0, 0]
 
     def move(self, direction):
-        if direction == "DOWN":
+        if direction == "DOWN" and self.movement != [0, self.block[1] * -1]:
             self.movement = [0, self.block[1]]
-        elif direction == "UP":
+        elif direction == "UP" and self.movement != [0, self.block[1]]:
             self.movement = [0, self.block[1] * -1]
-        elif direction == "RIGHT":
+        elif direction == "RIGHT" and self.movement != [self.block[0] * -1, 0]:
             self.movement = [self.block[0], 0]
-        elif direction == "LEFT":
+        elif direction == "LEFT" and self.movement != [self.block[0], 0]:
             self.movement = [self.block[0] * -1, 0]
+
+    def grow(self):
+        self.body.append(self.head[:])
 

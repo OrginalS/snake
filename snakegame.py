@@ -58,6 +58,11 @@ class SnakeGame:
         """Moves the snake"""
         self.snake.head[0] += self.snake.movement[0]
         self.snake.head[1] += self.snake.movement[1]
+        try:
+            self.snake.body.pop(0)
+        except IndexError:
+            pass
+        self.snake.body.append(self.snake.head[:])
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -66,7 +71,7 @@ class SnakeGame:
         self.screen.fill(self.settings.bg_color)
 
         # draw fruit
-        pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits, self.fruit.block))
+        pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block))
 
         # draw snake
         pygame.draw.rect(self.screen, self.snake.color, (self.snake.head, self.snake.block))
@@ -76,14 +81,22 @@ class SnakeGame:
         # draw lines
         self._lines()
         pygame.display.flip()
-        sleep(0.2)
+        sleep(0.1)
+
+    def _check_colisions(self):
+        if self.snake.head == self.fruit.fruits[0]:
+            self.fruit.fruits.pop()
+            self.snake.grow()
+        elif self.snake.head in self.snake.body[:-1]:
+            print("you'r dead")
+            sleep(500)
 
     def run(self):
         """Starts the game"""
         while True:
+            self._check_colisions()
             if not self.fruit.fruits:
                 self.fruit.new_fruit()
-                print("fruit")
             self._check_events()
             self._update_snake()
             self._update_screen()
