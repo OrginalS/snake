@@ -7,10 +7,10 @@ from fruit import Fruit
 
 
 class SnakeGame:
-    """overall class to manage game assets and behavior"""
+    """Overall class to manage game assets and behavior"""
 
     def __init__(self):
-        """initialize the game, and create game resources"""
+        """Initialize the game, and create game resources"""
 
         pygame.init()
 
@@ -29,6 +29,7 @@ class SnakeGame:
         self.lines = [i * self.settings.block for i in range(self.screen.get_rect().right // self.settings.block)]
 
     def _check_events(self):
+        """Handles events"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -74,25 +75,28 @@ class SnakeGame:
         pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block))
 
         # draw snake
-        pygame.draw.rect(self.screen, self.snake.color, (self.snake.head, self.snake.block))
+        #pygame.draw.rect(self.screen, self.snake.color, (self.snake.head, self.snake.block))
         for part in self.snake.body:
             pygame.draw.rect(self.screen, self.snake.color, (part, self.snake.block))
 
         # draw lines
-        self._lines()
+        #self._lines()
         pygame.display.flip()
         sleep(0.1)
 
     def _check_collisions(self):
+        """Handles collisions withe the fruit, snake body and borders"""
         if self.snake.head == self.fruit.fruits[0]:
             self.fruit.fruits.pop()
             self.snake.grow()
         elif self.snake.head in self.snake.body[:-1]:
-            print("you'r dead")
-            sleep(500)
+            print("Game over")
+        elif not 0-self.settings.block < self.snake.head[0] < self.settings.screen_size[0]\
+        or not 0-self.settings.block < self.snake.head[1] < self.settings.screen_size[1]:
+            print("Game over")
 
     def run(self):
-        """Starts the game"""
+        """Main game loop"""
         while True:
             self._check_collisions()
             if not self.fruit.fruits:

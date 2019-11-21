@@ -2,9 +2,9 @@ class Snake:
     """Snake"""
 
     def __init__(self, snake_game):
+        """Initialize the snake object and attributes"""
         self.snake_game = snake_game
         self.block = (self.snake_game.settings.block, self.snake_game.settings.block)
-        self.size = 1
         self.color = (255, 255, 255)
         self.head = [
             self.snake_game.settings.screen_size[0] // self.block[0] // 2 * self.block[0],
@@ -14,6 +14,7 @@ class Snake:
         self.movement = [0, 0]
 
     def move(self, direction):
+        """Handles snake movement"""
         if direction == "DOWN" and self.movement != [0, self.block[1] * -1]:
             self.movement = [0, self.block[1]]
         elif direction == "UP" and self.movement != [0, self.block[1]]:
@@ -24,5 +25,6 @@ class Snake:
             self.movement = [self.block[0] * -1, 0]
 
     def grow(self):
+        """Handles growth of snake"""
         self.body.append(self.head[:])
 
