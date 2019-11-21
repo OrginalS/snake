@@ -5,7 +5,7 @@ class Snake:
         """Initialize the snake object and attributes"""
         self.snake_game = snake_game
         self.block = (self.snake_game.settings.block, self.snake_game.settings.block)
-        self.color = (255, 255, 255)
+        self.color = (0, 200, 0)
         self.head = [
             self.snake_game.settings.screen_size[0] // self.block[0] // 2 * self.block[0],
             self.snake_game.settings.screen_size[1] // self.block[1] // 2 * self.block[1]

@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from snake import Snake
 from fruit import Fruit
+from ai import AI
 
 
 class SnakeGame:
@@ -24,6 +25,7 @@ class SnakeGame:
         # objects
         self.snake = Snake(self)
         self.fruit = Fruit(self)
+        self.ai = AI(self)
 
         # lines
         self.lines = [i * self.settings.block for i in range(self.screen.get_rect().right // self.settings.block)]
@@ -102,6 +104,8 @@ class SnakeGame:
             if not self.fruit.fruits:
                 self.fruit.new_fruit()
             self._check_events()
+            if self.settings.ai_enabled:
+                self.ai.ai_move()
             self._update_snake()
             self._update_screen()
 

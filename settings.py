@@ -6,3 +6,4 @@ class Settings:
         self.screen_size = (600, 600)
         self.bg_color = (200, 200, 200)
         self.block = 20
+        self.ai_enabled = False
