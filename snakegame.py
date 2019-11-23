@@ -5,6 +5,7 @@ from settings import Settings
 from snake import Snake
 from fruit import Fruit
 from ai import AI
+from button import Button
 
 
 class SnakeGame:
@@ -29,6 +30,11 @@ class SnakeGame:
 
         # lines
         self.lines = [i * self.settings.block for i in range(self.screen.get_rect().right // self.settings.block)]
+
+        # buttons
+        self.play_button = Button(
+            self, (0, 100, 0), "PLAY", [i-j for i, j in zip(self.screen.get_rect().center, (50, 20))]
+        )
 
     def _check_events(self):
         """Handles events"""
@@ -83,6 +89,7 @@ class SnakeGame:
 
         # draw lines
         #self._lines()
+        self.play_button.show_button()
         pygame.display.flip()
         sleep(0.1)
 
