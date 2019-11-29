@@ -5,14 +5,30 @@ import pygame.font
 class Button:
     """Button class"""
 
-    def __init__(self, snake_game, color, text, pos):
+    def __init__(self, snake_game, color, text, pos, size, font):
         self.snake_game = snake_game
-        self.size = (100, 40)
+
+        # button properties
         self.color = color
         self.text = text
         self.pos = pos
-        self.font = pygame.font.SysFont(None, 36)
+        self.size = size
+        self.font = pygame.font.SysFont(None, font)
+
+        # build buttons rect object and center it
+        self.rect = pygame.Rect(*self.pos, *self.size)
+
+        # prep text
+        self._prep_text(self.text)
+
+    def _prep_text(self, text):
+        """Turn msg into a rendered image and center text on the button."""
+        self.text_image = self.font.render(text, True, (255, 255, 255), self.color)
+        self.text_image_rect = self.text_image.get_rect()
+        self.text_image_rect.center = self.rect.center
 
     def show_button(self):
         """Shows button on the screen"""
-        pygame.draw.rect(self.snake_game.screen, self.color, (self.pos, self.size))
+        # draw blank button and then draw message
+        self.snake_game.screen.fill(self.color, self.rect)
+        self.snake_game.screen.blit(self.text_image, self.text_image_rect)

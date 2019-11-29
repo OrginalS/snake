@@ -19,11 +19,17 @@ class SnakeGame:
         # settings
         self.settings = Settings()
 
+        # actives
+        self.game_active = False
+        self.settings_button_active = False
+
         # screen
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         pygame.display.set_caption("Snake")
 
         # objects
+        self.logo = pygame.image.load("images/logo.png")
+        #self.logo = pygame.transform.scale(self.logo, (300, 100))
         self.snake = Snake(self)
         self.fruit = Fruit(self)
         self.ai = AI(self)
@@ -33,7 +39,10 @@ class SnakeGame:
 
         # buttons
         self.play_button = Button(
-            self, (0, 100, 0), "PLAY", [i-j for i, j in zip(self.screen.get_rect().center, (50, 20))]
+            self, (0, 100, 0), "PLAY", [i-j for i, j in zip(self.screen.get_rect().center, (50, 20))], (100, 40), 36
+        )
+        self.settings_button = Button(
+            self, (0, 0, 0), "SETTINGS", (self.play_button.pos[0]-25, self.play_button.pos[1] + 100), (150, 40), 36
         )
 
     def _check_events(self):
@@ -43,6 +52,8 @@ class SnakeGame:
                 exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_key_presses(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self._check_mouse_clicks(event)
 
     def _check_key_presses(self, event):
         """Decides what to do when a button is pressed"""
@@ -56,6 +67,13 @@ class SnakeGame:
             self.snake.move("RIGHT")
         elif event.key == pygame.K_ESCAPE:
             exit()
+
+    def _check_mouse_clicks(self, event):
+        if event.button == 1:
+            if self.play_button.rect.collidepoint(*event.pos) and not self.game_active and not self.settings_button_active:
+                self.game_active = True
+            elif self.settings_button.rect.collidepoint(*event.pos) and not self.game_active:
+                self.settings_button_active = True
 
     def _lines(self):
         """Draws dividing lines"""
@@ -88,8 +106,18 @@ class SnakeGame:
             pygame.draw.rect(self.screen, self.snake.color, (part, self.snake.block))
 
         # draw lines
-        #self._lines()
-        self.play_button.show_button()
+        #self.lines()
+
+        # draw buttons and logo
+        if not self.game_active:
+            self.screen.blit(self.logo, (0, 50))
+            if not self.settings_button_active:
+                self.play_button.show_button()
+                self.settings_button.show_button()
+            else:
+                # todo
+                pass
+
         pygame.display.flip()
         sleep(0.1)
 
@@ -106,7 +134,10 @@ class SnakeGame:
 
     def run(self):
         """Main game loop"""
-        while True:
+        while not self.game_active:
+            self._check_events()
+            self._update_screen()
+        while self.game_active:
             self._check_collisions()
             if not self.fruit.fruits:
                 self.fruit.new_fruit()
