@@ -1,4 +1,5 @@
 from random import randint
+import pygame
 
 
 class Fruit:
@@ -12,6 +13,7 @@ class Fruit:
         self.color = (255, 0, 0)
         self.fruits = []
         self.new_fruit()
+        self.sound = pygame.mixer.Sound("sounds/fruit.wav")
 
     def new_fruit(self):
         """Generates new fruit if there is no fruit on the screen"""

@@ -48,6 +48,9 @@ class SnakeGame:
         self.back_button = Button(
             self, (0, 0, 0), "BACK", (self.play_button.pos[0], self.play_button.pos[1] + 100), (100, 40), 36
         )
+        self.ai_button = Button(
+            self, (200, 0, 0), "AI DISABLED", (self.play_button.pos[0]-40, self.play_button.pos[1]), (180, 40), 36
+        )
 
     def _reset_game(self):
         """Resets the game"""
@@ -79,14 +82,31 @@ class SnakeGame:
     def _check_mouse_clicks(self, event):
         """Handles mouse actions"""
         if event.button == 1 and not self.game_active:
-            if self.play_button.rect.collidepoint(*event.pos) and not self.settings_button_active:
-                self._reset_game()
-                self.game_active = True
-            elif self.settings_button.rect.collidepoint(*event.pos) and not self.settings_button_active:
-                self.settings_button_active = True
-            elif self.back_button.rect.collidepoint(*event.pos) and self.settings_button_active:
-                self.settings_button_active = False
-            # todo: ai button, dark mode button, sound button, line button,
+            # main screen buttons
+            if not self.settings_button_active:
+                # play button
+                if self.play_button.rect.collidepoint(*event.pos):
+                    self.game_active = True
+                # settings button
+                elif self.settings_button.rect.collidepoint(*event.pos):
+                    self.settings_button_active = True
+            # setting screen buttons
+            elif self.settings_button_active:
+                # back button
+                if self.back_button.rect.collidepoint(*event.pos):
+                    self.settings_button_active = False
+                    # ai button
+                elif self.ai_button.rect.collidepoint(*event.pos):
+                    if self.settings.ai_enabled:
+                        self.ai_button.color = (200, 0, 0)
+                        self.ai_button.text = "AI DISABLED"
+                        self.settings.ai_enabled = False
+                    elif not self.settings.ai_enabled:
+                        self.ai_button.color = (0, 200, 0)
+                        self.ai_button.text = "AI ENABLED"
+                        self.settings.ai_enabled = True
+
+            # todo: dark mode button, sound button, line button, reset button
 
     def _lines(self):
         """Draws dividing lines"""
@@ -110,17 +130,6 @@ class SnakeGame:
         # fill the screen with color
         self.screen.fill(self.settings.bg_color)
 
-        # draw fruit
-        pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block))
-
-        # draw snake
-        #pygame.draw.rect(self.screen, self.snake.color, (self.snake.head, self.snake.block))
-        for part in self.snake.body:
-            pygame.draw.rect(self.screen, self.snake.color, (part, self.snake.block))
-
-        # draw lines
-        #self._lines()
-
         # draw buttons and logo
         if not self.game_active:
             self.screen.blit(self.logo, (0, 50))
@@ -130,6 +139,18 @@ class SnakeGame:
             else:
                 # todo
                 self.back_button.show_button()
+                self.ai_button.show_button()
+        else:   
+            # draw fruit
+            pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block))
+
+            # draw snake
+            #pygame.draw.rect(self.screen, self.snake.color, (self.snake.head, self.snake.block))
+            for part in self.snake.body:
+                pygame.draw.rect(self.screen, self.snake.color, (part, self.snake.block))
+
+            # draw lines
+            #self._lines()
 
         pygame.display.flip()
         sleep(0.1)
@@ -137,15 +158,18 @@ class SnakeGame:
     def _check_collisions(self):
         """Handles collisions withe the fruit, snake body and borders"""
         if self.snake.head == self.fruit.fruits[0]:
+            self.fruit.sound.play()
             self.fruit.fruits.pop()
             self.snake.grow()
         elif self.snake.head in self.snake.body[:-1]:
-            print("Game over")
             self.game_active = False
+            # todo: reset button and score
+            self._reset_game()
         elif not 0-self.settings.block < self.snake.head[0] < self.settings.screen_size[0]\
         or not 0-self.settings.block < self.snake.head[1] < self.settings.screen_size[1]:
-            print("Game over")
             self.game_active = False
+            # todo: reset button and score
+            self._reset_game()
 
     def run(self):
         """Main game loop"""

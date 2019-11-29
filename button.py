@@ -31,4 +31,5 @@ class Button:
         """Shows button on the screen"""
         # draw blank button and then draw message
         self.snake_game.screen.fill(self.color, self.rect)
+        self._prep_text(self.text)
         self.snake_game.screen.blit(self.text_image, self.text_image_rect)
