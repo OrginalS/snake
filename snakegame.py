@@ -45,10 +45,13 @@ class SnakeGame:
         self.settings_button = Button(
             self, (0, 0, 0), "SETTINGS", (self.play_button.pos[0]-25, self.play_button.pos[1] + 100), (150, 40), 36
         )
+        self.back_button = Button(
+            self, (0, 0, 0), "BACK", (self.play_button.pos[0], self.play_button.pos[1] + 100), (100, 40), 36
+        )
 
     def _reset_game(self):
-        #todo
-        pass
+        """Resets the game"""
+        self.__init__()
 
     def _check_events(self):
         """Handles events"""
@@ -74,12 +77,16 @@ class SnakeGame:
             exit()
 
     def _check_mouse_clicks(self, event):
-        if event.button == 1:
-            if self.play_button.rect.collidepoint(*event.pos) and not self.game_active and not self.settings_button_active:
+        """Handles mouse actions"""
+        if event.button == 1 and not self.game_active:
+            if self.play_button.rect.collidepoint(*event.pos) and not self.settings_button_active:
                 self._reset_game()
                 self.game_active = True
-            elif self.settings_button.rect.collidepoint(*event.pos) and not self.game_active:
+            elif self.settings_button.rect.collidepoint(*event.pos) and not self.settings_button_active:
                 self.settings_button_active = True
+            elif self.back_button.rect.collidepoint(*event.pos) and self.settings_button_active:
+                self.settings_button_active = False
+            # todo: ai button, dark mode button, sound button, line button,
 
     def _lines(self):
         """Draws dividing lines"""
@@ -122,7 +129,7 @@ class SnakeGame:
                 self.settings_button.show_button()
             else:
                 # todo
-                pass
+                self.back_button.show_button()
 
         pygame.display.flip()
         sleep(0.1)
