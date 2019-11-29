@@ -17,4 +17,9 @@ class Fruit:
         """Generates new fruit if there is no fruit on the screen"""
         x = self.screen[2] / self.block[0]
         y = self.screen[3] / self.block[1]
-        self.fruits.append([randint(0, x-1) * self.block[0], randint(0, y-1) * self.block[1]])
+        while True:
+            posx = randint(0, x-1) * self.block[0]
+            posy = randint(0, y-1) * self.block[1]
+            if [posx, posy] not in self.snake_game.snake.body:
+                self.fruits.append([posx, posy])
+                break

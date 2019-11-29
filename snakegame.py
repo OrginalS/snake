@@ -19,6 +19,9 @@ class SnakeGame:
         # settings
         self.settings = Settings()
 
+        # logo
+        self.logo = pygame.image.load("images/logo.png")
+
         # actives
         self.game_active = False
         self.settings_button_active = False
@@ -28,8 +31,6 @@ class SnakeGame:
         pygame.display.set_caption("Snake")
 
         # objects
-        self.logo = pygame.image.load("images/logo.png")
-        #self.logo = pygame.transform.scale(self.logo, (300, 100))
         self.snake = Snake(self)
         self.fruit = Fruit(self)
         self.ai = AI(self)
@@ -44,6 +45,10 @@ class SnakeGame:
         self.settings_button = Button(
             self, (0, 0, 0), "SETTINGS", (self.play_button.pos[0]-25, self.play_button.pos[1] + 100), (150, 40), 36
         )
+
+    def _reset_game(self):
+        #todo
+        pass
 
     def _check_events(self):
         """Handles events"""
@@ -71,6 +76,7 @@ class SnakeGame:
     def _check_mouse_clicks(self, event):
         if event.button == 1:
             if self.play_button.rect.collidepoint(*event.pos) and not self.game_active and not self.settings_button_active:
+                self._reset_game()
                 self.game_active = True
             elif self.settings_button.rect.collidepoint(*event.pos) and not self.game_active:
                 self.settings_button_active = True
@@ -128,26 +134,27 @@ class SnakeGame:
             self.snake.grow()
         elif self.snake.head in self.snake.body[:-1]:
             print("Game over")
-            sleep(500)
+            self.game_active = False
         elif not 0-self.settings.block < self.snake.head[0] < self.settings.screen_size[0]\
         or not 0-self.settings.block < self.snake.head[1] < self.settings.screen_size[1]:
             print("Game over")
-            sleep(500)
+            self.game_active = False
 
     def run(self):
         """Main game loop"""
-        while not self.game_active:
-            self._check_events()
-            self._update_screen()
-        while self.game_active:
-            self._check_collisions()
-            if not self.fruit.fruits:
-                self.fruit.new_fruit()
-            self._check_events()
-            if self.settings.ai_enabled:
-                self.ai.ai_move()
-            self._update_snake()
-            self._update_screen()
+        while True:
+            while not self.game_active:
+                self._check_events()
+                self._update_screen()
+            while self.game_active:
+                self._check_collisions()
+                if not self.fruit.fruits:
+                    self.fruit.new_fruit()
+                self._check_events()
+                if self.settings.ai_enabled:
+                    self.ai.ai_move()
+                self._update_snake()
+                self._update_screen()
 
 
 if __name__ == "__main__":
