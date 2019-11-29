@@ -106,7 +106,7 @@ class SnakeGame:
             pygame.draw.rect(self.screen, self.snake.color, (part, self.snake.block))
 
         # draw lines
-        #self.lines()
+        #self._lines()
 
         # draw buttons and logo
         if not self.game_active:
@@ -128,9 +128,11 @@ class SnakeGame:
             self.snake.grow()
         elif self.snake.head in self.snake.body[:-1]:
             print("Game over")
+            sleep(500)
         elif not 0-self.settings.block < self.snake.head[0] < self.settings.screen_size[0]\
         or not 0-self.settings.block < self.snake.head[1] < self.settings.screen_size[1]:
             print("Game over")
+            sleep(500)
 
     def run(self):
         """Main game loop"""
