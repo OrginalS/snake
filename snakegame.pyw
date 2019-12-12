@@ -1,4 +1,5 @@
 from time import sleep
+from sys import exit
 import pygame
 
 from settings import Settings
@@ -48,15 +49,21 @@ class SnakeGame:
         self.ai = AI(self)
 
         # lines
-        self.lines = [i * self.settings.block for i in range(self.screen.get_rect().right // self.settings.block)]
+        self.lines = [
+            i * self.settings.block for i in range(
+                self.screen.get_rect().right // self.settings.block
+            )
+        ]
 
         # buttons
         # main menu buttons
         self.play_button = Button(
-            self, (0, 100, 0), "PLAY", [i-j for i, j in zip(self.screen.get_rect().center, (50, 20))], (100, 40), 36
+            self, (0, 100, 0), "PLAY",
+            [i-j for i, j in zip(self.screen.get_rect().center, (50, 20))], (100, 40), 36
         )
         self.settings_button = Button(
-            self, (0, 0, 0), "SETTINGS", (self.play_button.pos[0]-25, self.play_button.pos[1] + 80), (150, 40), 36
+            self, (0, 0, 0), "SETTINGS",
+            (self.play_button.pos[0]-25, self.play_button.pos[1] + 80), (150, 40), 36
         )
         self.how_to_play_button = Button(
             self, (0, 0, 0), "HOW TO PLAY",
@@ -65,30 +72,38 @@ class SnakeGame:
 
         # settings menu buttons
         self.ai_button = Button(
-            self, (200, 0, 0), "AI DISABLED", (80, self.play_button.pos[1]), (180, 40), 36
+            self, (200, 0, 0), "AI DISABLED",
+            (80, self.play_button.pos[1]), (180, 40), 36
         )
         self.lines_button = Button(
-            self, (200, 0, 0), "LINES OFF", (80, self.play_button.pos[1] + 80), (180, 40), 36
+            self, (200, 0, 0), "LINES OFF",
+            (80, self.play_button.pos[1] + 80), (180, 40), 36
         )
         self.sound_button = Button(
-            self, (0, 200, 0), "SOUND ON", (340, self.play_button.pos[1]), (180, 40), 36
+            self, (0, 200, 0), "SOUND ON",
+            (340, self.play_button.pos[1]), (180, 40), 36
         )
         self.dark_mode_button = Button(
-            self, (0, 0, 0), "LIGHT MODE", (340, self.play_button.pos[1] + 80), (180, 40), 36
+            self, (0, 0, 0), "LIGHT MODE",
+            (340, self.play_button.pos[1] + 80), (180, 40), 36
         )
 
         # special buttons
         self.back_button = Button(
-            self, (0, 0, 0), "BACK", (self.play_button.pos[0], self.play_button.pos[1] + 200), (100, 40), 36
+            self, (0, 0, 0), "BACK",
+            (self.play_button.pos[0], self.play_button.pos[1] + 200), (100, 40), 36
         )
         self.reset_button = Button(
-            self, (0, 0, 0), "MENU", (self.play_button.pos[0], self.play_button.pos[1] + 80), (100, 40), 36
+            self, (0, 0, 0), "MENU",
+            (self.play_button.pos[0], self.play_button.pos[1] + 80), (100, 40), 36
         )
         self.quit_button = Button(
-            self, (200, 0, 0), "QUIT", (self.play_button.pos[0], self.how_to_play_button.pos[1] + 80), (100, 40), 36
+            self, (200, 0, 0), "QUIT",
+            (self.play_button.pos[0], self.how_to_play_button.pos[1] + 80), (100, 40), 36
         )
         self.resume_button = Button(
-            self, (0, 100, 0), "RESUME", (self.play_button.pos[0] - 20, self.play_button.pos[1]), (140, 40), 36
+            self, (0, 100, 0), "RESUME",
+            (self.play_button.pos[0] - 20, self.play_button.pos[1]), (140, 40), 36
         )
 
     def _reset_game(self):
@@ -201,8 +216,12 @@ class SnakeGame:
     def _draw_lines(self):
         """Draws dividing lines"""
         for line in self.lines:
-            pygame.draw.line(self.screen, (0, 0, 0), (0, line), (self.settings.screen_size[0], line))
-            pygame.draw.line(self.screen, (0, 0, 0), (line, 0), (line, self.settings.screen_size[1]))
+            pygame.draw.line(
+                self.screen, (0, 0, 0), (0, line), (self.settings.screen_size[0], line)
+            )
+            pygame.draw.line(
+                self.screen, (0, 0, 0), (line, 0), (line, self.settings.screen_size[1])
+            )
 
     def _check_lines(self):
         """Enables and disables dividing lines"""
@@ -264,7 +283,9 @@ class SnakeGame:
         # game active
         elif self.game_active:
             # draw fruit
-            pygame.draw.rect(self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block))
+            pygame.draw.rect(
+                self.screen, self.fruit.color, (self.fruit.fruits[0], self.fruit.block)
+            )
 
             # draw snake
             for part in self.snake.body:
