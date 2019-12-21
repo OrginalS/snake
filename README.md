@@ -1,3 +1,3 @@
-# snake
+# Snake
 
 Run with snakegame.pyw
