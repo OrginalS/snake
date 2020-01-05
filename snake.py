@@ -23,8 +23,8 @@ class Snake:
             self.movement = [self.block[0], 0]
         elif direction == "LEFT" and self.movement != [self.block[0], 0]:
             self.movement = [self.block[0] * -1, 0]
+        self.snake_game.movement_flag = True
 
     def grow(self):
         """Handles growth of snake"""
         self.body.append(self.head[:])
-

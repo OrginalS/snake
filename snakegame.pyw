@@ -38,6 +38,7 @@ class SnakeGame:
         self.game_over = False
         self.pause_active = False
         self.how_to_play_active = False
+        self.movement_flag = False
 
         # screen
         self.screen = pygame.display.set_mode(self.settings.screen_size)
@@ -122,7 +123,7 @@ class SnakeGame:
 
     def _check_key_presses(self, event):
         """Decides what to do when a button is pressed"""
-        if not self.pause_active:
+        if not self.pause_active and not self.movement_flag:
             if event.key == pygame.K_UP:
                 self.snake.move("UP")
             elif event.key == pygame.K_DOWN:
@@ -360,6 +361,7 @@ class SnakeGame:
                 if not self.fruit.fruits:
                     self.fruit.new_fruit()
                 self._check_events()
+                self.movement_flag = False
                 if self.settings.ai_enabled:
                     self.ai.ai_move()
                 self._update_snake()
