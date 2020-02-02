@@ -1,5 +1,5 @@
 class AI:
-    """Artificial inteligence"""
+    """Artificial intelligence"""
 
     def __init__(self, snake_game):
         self.snake_game = snake_game

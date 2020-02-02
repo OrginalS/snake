@@ -7,6 +7,7 @@ from snake import Snake
 from fruit import Fruit
 from ai import AI
 from button import Button
+from score import Score
 
 
 class SnakeGame:
@@ -22,9 +23,6 @@ class SnakeGame:
 
         # clock
         self.clock = pygame.time.Clock()
-
-        # score
-        self.score = 0
 
         # graphics
         self.logo = pygame.image.load("images/logo.png")
@@ -48,6 +46,7 @@ class SnakeGame:
         self.snake = Snake(self)
         self.fruit = Fruit(self)
         self.ai = AI(self)
+        self.score = Score(self)
 
         # lines
         self.lines = [
@@ -109,7 +108,19 @@ class SnakeGame:
 
     def _reset_game(self):
         """Resets the game"""
-        self.__init__()
+        self.game_active = False
+        self.settings_button_active = False
+        self.game_over = False
+        self.pause_active = False
+        self.how_to_play_active = False
+        self.movement_flag = False
+        self.snake = Snake(self)
+        self.fruit = Fruit(self)
+        self.score = Score(self)
+        self.ai = AI(self)
+        if self.settings.dark_mode_enabled:
+            self.snake.color = (200, 200, 200)
+            self.fruit.color = (200, 0, 0)
 
     def _check_events(self):
         """Handles events"""
@@ -279,7 +290,8 @@ class SnakeGame:
             self.screen.blit(self.game_over_logo, (0, 50))
             self.reset_button.show_button()
             self.quit_button.show_button()
-            # todo: score
+            self.score.save_high_score()
+            self.score.show_score()
 
         # game active
         elif self.game_active:
@@ -299,6 +311,7 @@ class SnakeGame:
             # pause
             if self.pause_active:
                 self.screen.blit(self.pause_logo, (0, 50))
+                self.score.show_score(pause=True)
                 self.resume_button.show_button()
                 self.reset_button.show_button()
                 self.quit_button.show_button()
@@ -336,27 +349,29 @@ class SnakeGame:
                 self.fruit.sound.play()
             self.fruit.fruits.pop()
             self.snake.grow()
-            self.score += 10
+            self.score.score += 10
         elif self.snake.head in self.snake.body[:-1]:
             self.game_active = False
-            # todo: score
             self.game_over = True
         elif not 0-self.settings.block < self.snake.head[0] < self.settings.screen_size[0]\
         or not 0-self.settings.block < self.snake.head[1] < self.settings.screen_size[1]:
             self.game_active = False
-            # todo: score
             self.game_over = True
 
     def run(self):
         """Main game loop"""
         while True:
             while not self.game_active:
+                pygame.mouse.set_visible(True)
                 self._check_events()
                 self._update_screen()
+                pygame.mouse.set_visible(False)
             while self.game_active:
                 while self.pause_active:
+                    pygame.mouse.set_visible(True)
                     self._check_events()
                     self._update_screen()
+                    pygame.mouse.set_visible(False)
                 self._check_collisions()
                 if not self.fruit.fruits:
                     self.fruit.new_fruit()
