@@ -279,7 +279,7 @@ class SnakeGame:
         self.snake.body.append(self.snake.head[:])
 
     def _update_screen(self):
-        """Update images on the screen, and flip to the new screen."""
+        """Update images on the screen, and flip to the new screen"""
 
         # fill the screen with color
         self.screen.fill(self.settings.bg_color)
